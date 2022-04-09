@@ -22,16 +22,20 @@ const BooksSchema = new mongoose.Schema({
 
 const validateBook = book => {
     //key names should be same as body name
-    const schema = yup.object.shape({
-      bookName : yup.string().required.min(3).max(50),
-      authorName : yup.string().required.min(3).max(50),
-      authorAge : yup.number().required.min(10).max(50),
-      genre : yup.string.required().min(3).max(50)
+    const schema = yup.object().shape({
+      bookName : yup.string().required().min(3).max(50),
+      authorName : yup.string().required().min(3).max(50),
+      authorAge : yup.number().required().min(10).max(100),
+      genre : yup.string().required().min(3).max(50)
     });
 
     return schema.validate(book)
     .then(book => book)
-    .catch(error => console.log(error));
+    .catch((error) => {
+        return {
+            message : error.message
+        }
+    });
 }
 
 const Books = new mongoose.model("Book", BooksSchema);

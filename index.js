@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
     res.send("Server is running");
 });
 //routes
+//When I tried to use this first without commiting to git, error showed 404 doesn't exist
 app.use("/api/books", booksRoute);
 
 app.listen(PORT, ()=> {

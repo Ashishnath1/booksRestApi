@@ -5,7 +5,11 @@ const {Book, validateBook} = require("../models/books");
 //POST: Create a new book
 router.post("/", async (req, res) => {
     try{
-        validateBook(req.body);
+       const message = await validateBook(req.body);
+       if(message)
+       {
+           res.status(400).send(message);
+       }
         const book = new Book({
             name : req.body.bookName,
             author : {
