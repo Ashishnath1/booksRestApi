@@ -8,7 +8,7 @@ router.post("/", async (req, res) => {
        const message = await validateBook(req.body);
        if(message)
        {
-           res.status(400).send(message);
+           console.log(message);
        }
         const book = new Book({
             name : req.body.bookName,
@@ -19,13 +19,79 @@ router.post("/", async (req, res) => {
             genre : req.body.genre
         });
         const registerBook = await book.save();
-        res.send(book);
+        res.send(registerBook);
     }
     catch(error){
-        res.status(500).send("book was not stored in database");
         console.log(error);
     }
  
 });
+
+//GET: get all books
+router.get("/", async(req, res) => {
+    try{
+        const books = await Book.find();
+        if(books){
+            res.send(books)
+        }
+    }
+    catch(error){
+        console.log(error);
+    }
+  
+});
+
+//GET book by id
+router.get("/:bookGenre", async(req, res) => {
+   try {
+       const book = await Book.findOne({genre : req.params.bookGenre},
+        
+        );
+       if(book)
+          res.send(book);
+        else
+          res.send("Book not found!");
+   } catch (error) {
+       console.log(error);
+   }
+});
+
+router.put("/update/:bookName", async(req, res) => {
+    try {
+    
+     const updatedBook = await Book.findOneAndUpdate({name : req.params.bookName},
+        {
+            name : req.body.bookName,
+            author : {
+                name : req.body.authorName, 
+                age : req.body.authorAge
+            },
+            genre : req.body.genre
+        },
+        {new : true}
+        );
+        if(updatedBook)
+           res.send(updatedBook);
+        else
+           res.send("Book not found!")
+       
+    } catch (error) {
+        console.log(error);
+    }
+     
+});
+
+router.delete("/delete/:bookName", async(req, res) => {
+    try {
+        const deletedBook = await Book.findOneAndDelete({name : req.params.bookName});
+        if(deletedBook)
+           res.send(`The book ${deletedBook.name} deleted successfully`);
+        else
+           res.send("Book not found");   
+    } catch (error) {
+        console.log(error);
+        
+    }
+})
 
 module.exports = router;

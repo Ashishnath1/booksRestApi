@@ -20,11 +20,10 @@ mongoose.connect(process.env.MONGO_URL,
     console.log(error);
 })
 
-app.get("/", (req, res) => {
-    res.send("Server is running");
-});
 //routes
-//When I tried to use this first without commiting to git, error showed 404 doesn't exist
+//When I tried to use this first without commiting to git, error showed 404 Not Found
+//Answer: I need to restart server again, I forgot to run node index.js again
+
 app.use("/api/books", booksRoute);
 
 app.listen(PORT, ()=> {
